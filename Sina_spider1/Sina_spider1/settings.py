@@ -10,7 +10,7 @@ DOWNLOADER_MIDDLEWARES = {
 }
 
 ITEM_PIPELINES = {
-    'Sina_spider1.pipelines.MongoDBPipleline': 300,
+    'Sina_spider1.pipelines.SinaPipleline': 300,
 }
 
 DOWNLOAD_DELAY = 2  # 间隔时间

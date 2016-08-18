@@ -10,11 +10,7 @@ from Sina_spider1.items import InformationItem, TweetsItem, FollowsItem, FansIte
 class Spider(CrawlSpider):
     name = "sinaSpider"
     host = "http://weibo.cn"
-    start_urls = [
-        5235640836, 5676304901, 5871897095, 2139359753, 5579672076, 2517436943, 5778999829, 5780802073, 2159807003,
-        1756807885, 3378940452, 5762793904, 1885080105, 5778836010, 5722737202, 3105589817, 5882481217, 5831264835,
-        2717354573, 3637185102, 1934363217, 5336500817, 1431308884, 5818747476, 5073111647, 5398825573, 2501511785,
-    ]
+    start_urls = [1254123322, 1828817187]
     scrawl_ID = set(start_urls)  # 记录待爬的微博ID
     finish_ID = set()  # 记录已爬的微博ID
 
@@ -45,6 +41,10 @@ class Spider(CrawlSpider):
     def parse0(self, response):
         """ 抓取个人信息1 """
         informationItems = InformationItem()
+        informationItems["Num_Tweets"] = ""
+        informationItems["Num_Follows"] = ""
+        informationItems["Num_Fans"] = ""
+
         selector = Selector(response)
         text0 = selector.xpath('body/div[@class="u"]/div[@class="tip2"]').extract_first()
         if text0:
@@ -64,6 +64,16 @@ class Spider(CrawlSpider):
     def parse1(self, response):
         """ 抓取个人信息2 """
         informationItems = response.meta["item"]
+        informationItems["NickName"] = ""
+        informationItems["Gender"] = ""
+        informationItems["Province"] = ""
+        informationItems["City"] = ""
+        informationItems["Signature"] = ""
+        informationItems["Birthday"] = ""
+        informationItems["Sex_Orientation"] = ""
+        informationItems["Marriage"] = ""
+        informationItems["URL"] = ""
+
         selector = Selector(response)
         text1 = ";".join(selector.xpath('body/div[@class="c"]/text()').extract())  # 获取标签里的所有text()
         nickname = re.findall(u'\u6635\u79f0[:|\uff1a](.*?);', text1)  # 昵称
@@ -106,9 +116,11 @@ class Spider(CrawlSpider):
     def parse2(self, response):
         """ 抓取微博数据 """
         selector = Selector(response)
+
         tweets = selector.xpath('body/div[@class="c" and @id]')
         for tweet in tweets:
             tweetsItems = TweetsItem()
+            tweetsItems["Co_oridinates"] = ""
             id = tweet.xpath('@id').extract_first()  # 微博ID
             content = tweet.xpath('div/span[@class="ctt"]/text()').extract_first()  # 微博内容
             cooridinates = tweet.xpath('div/a/@href').extract_first()  # 定位坐标
