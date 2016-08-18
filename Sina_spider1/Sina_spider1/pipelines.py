@@ -5,8 +5,10 @@ from items import InformationItem, TweetsItem, FollowsItem, FansItem
 
 class MongoDBPipleline(object):
     def __init__(self):
-        clinet = pymongo.MongoClient("localhost", 27017)
-        db = clinet["Sina"]
+        # clinet = pymongo.MongoClient("localhost", 27017)
+        # db = clinet["Sina"]
+        conn = pymongo.Connection('127.0.0.1', 27017)
+        db = conn.Sina
         self.Information = db["Information"]
         self.Tweets = db["Tweets"]
         self.Follows = db["Follows"]
